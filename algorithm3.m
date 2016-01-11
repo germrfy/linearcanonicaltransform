@@ -9,4 +9,4 @@ chirp1 = exp(1i*pi*((row/(nSamp*T)).^2)*c/d);     % first chirp
 chirp2 = exp(1i*pi*((row*d*T).^2)*(-b/d));     % second chirp
 
                                         % final computation of LCT
-lct = (fftshift(fft(fftshift(((fftshift(fft(fftshift(samples)))).*chirp1))))).*chirp2;
+lct = (fftshift(fft(fftshift(((fftshift(fft(fftshift(samples.*chirp1)))).*chirp2)))));
