@@ -12,8 +12,15 @@ figure
 imagesc(abs(image).^2)
 colormap gray;
 t = pi/4;
-tform = affine2d([cos(t) sin(t) 0; -sin(t) cos(t) 0; 0 0 1]);
-J = imwarp(image,tform, 'linear');
+%tform = affine2d([cos(t) sin(t) 0; -sin(t) cos(t) 0; 0 0 1]);
+t = affine2d([2 0 0;0 0.5 0 ; 0 0 1]);
+Tm = [2 0 0; 0 0.5 0; 0 0 1];    % Affine Transfermation Matrix
+
+tform = maketform('affine', Tm);
+
+
+[J,cdata,rdata] = imtransform(image,tform);
+J = imwarp(image,t, 'linear');
 
 figure
 imagesc(abs(J).^2)

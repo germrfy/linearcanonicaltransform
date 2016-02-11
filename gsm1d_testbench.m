@@ -9,7 +9,7 @@ x = rectpuls(t,1);
 figure(1)
 plot(t,x)
 
-alpha = 0.5;
+alpha = 0.1;
 a = cos(alpha*pi/2);
 b = sin(alpha*pi/2);
 c = -sin(alpha*pi/2);

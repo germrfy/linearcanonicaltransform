@@ -45,9 +45,9 @@ hol = hol.*exp(i*angle(conj(ref)));
 reconstruction_depth = -0.0025;
 
 %recon_hol = spectral_method(hol, reconstruction_depth, pixel_x, pixel_y, wavelength);
-%recon_hol = general_spectral_method(hol, 1, 1, reconstruction_depth*wavelength, reconstruction_depth*wavelength, 0, 0, pixel_x, pixel_y);
+recon_hol = general_spectral_method(hol, 1, 1, reconstruction_depth*wavelength, reconstruction_depth*wavelength, 0, 0, pixel_x, pixel_y);
 %recon_hol = general_direct_method(hol, 1, 1, reconstruction_depth*wavelength, reconstruction_depth*wavelength, 1, 1, pixel_x, pixel_y);
-recon_hol = general_algorithm3(hol, 1, 1, reconstruction_depth*wavelength, reconstruction_depth*wavelength, 0, 0, 1, 1, pixel_x, pixel_y);
+%recon_hol = general_algorithm3(hol, 1, 1, reconstruction_depth*wavelength, reconstruction_depth*wavelength, 0, 0, 1, 1, pixel_x, pixel_y);
 contrastproxy2 = 1;
 MIN = min(min(abs(recon_hol).^2)); 
 MAX = contrastproxy2*max(max(abs(recon_hol).^2));

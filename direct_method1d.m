@@ -2,6 +2,9 @@ function lct = direct_method1d(samples, T, a, b, c, d)
 % Written by Gerard Murphy - UCD ME student
 % Function to numerically calculate the LCT of a given set of samples using
 % the spectral method.
+% For algorithm breakdown see paper - 
+% "Space–bandwidth ratio as a means of choosing between Fresnel and other
+% linear canonical transform algorithms" J.J Healy + J Sheridan
 
 nSamp = length(samples);    % get the number of samples
 
