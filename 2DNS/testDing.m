@@ -5,8 +5,8 @@ clear all;
 %reference files.
 hol_filename = 'lena_gray.tif';
 
-period_x = 3.45e-6;
-period_y = 3.45e-6;
+period_x = 2.65e-6;
+period_y = 2.65e-6;
 
 image = imread(hol_filename);
 size(image)
@@ -23,8 +23,20 @@ B = [0.1618 -1.5123 ; -1.5477 -0.6075];
 C = [-6.5937 -10.9024 ; 1.5335 -2.9495];
 D = [0 10.7399 ; 1.7875 1.8244];
 
-result = ding2DNS(image, A, B, D, period_x, period_y);
+in = inv([A B; C D]);
 
+Ai = in([1 2], [1 2]);
+Bi = in([1 2], [3 4]);
+Ci = in([3 4], [1 2]);
+Di = in([3 4], [3 4]);
+
+%result = ding2DNS(image, A, B, D, period_x, period_y);
+[result, tx, ty] = spec2DNS(image, A, B, C, period_x, period_y);
+%result = spec2DNS(result, Ai, Bi, Ci, tx, ty);
+size(result)
 figure
 imagesc(abs(result).^2)
+
+figure
+imagesc(angle(result))
 
