@@ -5,6 +5,11 @@ A = 0.6; B = 2; C = -0.17; D = 1.1;
 % t = 2*pi/6;
 % A = cos(t); D = A;
 % B = sin(t); C = -B;
+% alpha = 0.5;
+% A = cos(alpha*pi/2);
+% B = sin(alpha*pi/2);
+% C = -sin(alpha*pi/2);
+% D = cos(alpha*pi/2);
 
 R = [0:.1:10]';
 

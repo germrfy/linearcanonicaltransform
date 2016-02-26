@@ -2,7 +2,7 @@ clear all; close all;
 Lx = 6; N = 256; Tx = Lx/N; fs = 1/Tx;
 x = [-3:Tx:3 - Tx];
 g = exp(-x.^2);
-%f = rectpulse(x/6, N);
+%g = rectangularPulse(x/6);
 f = padarray(g, [0, length(g)]);
 alpha = 0.3;
 a = cos(alpha*pi/2);
