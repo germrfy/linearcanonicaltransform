@@ -22,7 +22,7 @@ ASM = max([abs(1+(C/D)*R) abs(1-(C/D)*R) X], [], 2);
  
  p2 = plot(R, SM, 'b');
  
- p3 = plot(R, ASM, 'g');
+ p3 = plot(R, ASM, 'og');
  
  legend([p1, p2, p3], 'DM', 'GSM', 'AGSM');
  xlabel('Space Bandwidth Ratio')
