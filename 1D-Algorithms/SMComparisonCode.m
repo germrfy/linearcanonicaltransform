@@ -1,5 +1,5 @@
 clear all; close all;
-Lx = 6; N = 256; Tx = Lx/N; fs = 1/Tx;
+Lx = 6;Ly = 6; N = 32; Tx = Lx/N; fs = 1/Tx;
 x = [-3:Tx:3 - Tx];
 g = exp(-x.^2).*rectangularPulse(x/6);
 figure
@@ -7,14 +7,14 @@ plot(x, g);
 title('Gaussian Input')
 xlabel('x');
 ylabel('f(x)')
-alpha = 0.2;
-A = cos(alpha*pi/2);
-B = sin(alpha*pi/2);
-C = -sin(alpha*pi/2);
-D = cos(alpha*pi/2);
+% alpha = 0.2;
+% A = cos(alpha*pi/2);
+% B = sin(alpha*pi/2);
+% C = -sin(alpha*pi/2);
+% D = cos(alpha*pi/2);
 % A=3;B=2;C=1;D=1;
-% A=0.9;B=-1;C=0.1;D=1;
-f = padarray(g, [0, round(length(g))]);
+ A=0.9;B=1;C=-0.1;D=1;
+f = g;%padarray(g, [0, round(length(g))]);
 yGSM = abs(A)*Tx*((0:length(f)-1) - length(f)/2);       %output vector GSM
 yAGSM = (Tx/abs(D))*((0:length(f)-1) - length(f)/2);    %output vector AGSM
 y = [yGSM; yAGSM];
@@ -51,10 +51,10 @@ s = agsm1d(f, Tx, B, C, D);
 figure;
 anAbs = max(abs(an(2,:)));
 scs = max(abs(s));
-subplot(411);plot(y(2,:), abs(s)/scs, 'ob');hold on;plot(y(2,:), abs(an(2,:))/anAbs, '.r');title('GSM Absolute Value Vs Analytic Solution');
-subplot(412);plot(y(2,:), angle(s), 'ob');hold on;plot(y(2,:), angle(an(2,:)), '.r');title('GSM Phase Vs Analytic Solution');
-subplot(413);plot(y(2,:), real(s)/scs, 'ob');hold on;plot(y(2,:), real(an(2,:))/anAbs, '.r');title('GSM Real Part Vs Analytic Solution');
-subplot(414);plot(y(2,:), imag(s)/scs, 'ob');hold on; plot(y(2,:), imag(an(2,:))/anAbs, '.r');title('GSM Imaginary Part Vs Analytic Solution');
+subplot(411);plot(y(2,:), abs(s)/scs, 'ob');hold on;plot(y(2,:), abs(an(2,:))/anAbs, '.r');title('AGSM Absolute Value Vs Analytic Solution');
+subplot(412);plot(y(2,:), angle(s), 'ob');hold on;plot(y(2,:), angle(an(2,:)), '.r');title('AGSM Phase Vs Analytic Solution');
+subplot(413);plot(y(2,:), real(s)/scs, 'ob');hold on;plot(y(2,:), real(an(2,:))/anAbs, '.r');title('AGSM Real Part Vs Analytic Solution');
+subplot(414);plot(y(2,:), imag(s)/scs, 'ob');hold on; plot(y(2,:), imag(an(2,:))/anAbs, '.r');title('AGSM Imaginary Part Vs Analytic Solution');
 
 
 MSE_GSM = sum(abs((r/max(abs(r))-(an(1,:)/max(abs(an(1,:)))))).^2)/sum(abs(an(1,:)/max(abs(an(1,:)))).^2)*100
