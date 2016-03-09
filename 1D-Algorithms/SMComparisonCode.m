@@ -13,8 +13,11 @@ ylabel('f(x)')
 % C = -sin(alpha*pi/2);
 % D = cos(alpha*pi/2);
 % A=3;B=2;C=1;D=1;
- A=0.9;B=1;C=-0.1;D=1;
-f = g;%padarray(g, [0, round(length(g))]);
+% A=0.9;B=1;C=-0.1;D=1;     %%PAPER
+ %A=0.5;B=4;C=-0.125;D=1;   %%PAPER
+ %A=1;B=2;C=2.5;D=6;        %%PAPER
+ A=0.1;B=0.9;C=-1;D=1;
+f =g;% padarray(g, [0, round(length(g))]);
 yGSM = abs(A)*Tx*((0:length(f)-1) - length(f)/2);       %output vector GSM
 yAGSM = (Tx/abs(D))*((0:length(f)-1) - length(f)/2);    %output vector AGSM
 y = [yGSM; yAGSM];

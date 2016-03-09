@@ -1,5 +1,5 @@
 clear all;close all;
-nIt = 30;
+nIt = 15;
 Lx = 6; Ly = 6; N = 32; Tx = Lx/N; fs = 1/Tx;
 x = [-3:Tx:3 - Tx];
 g = exp(-x.^2).*rectangularPulse(x/6);
@@ -10,8 +10,9 @@ g = exp(-x.^2).*rectangularPulse(x/6);
 % D = cos(alpha*pi/2);
 % A=1;B=1;C=2;D=3;
 % A=3;B=2;C=1;D=1;
-A=0.9;B=1;C=-0.1;D=1;
+% A=0.9;B=1;C=-0.1;D=1;     %%PAPER
 %A = 0.6; B = 2; C = -0.17; D = 1.1;
+A=0.5;B=4;C=-0.125;D=1;     %%PAPER
 
 yg = abs(B)/(Tx*length(g))*((0:length(g)-1) - length(g)/2);
 
@@ -45,28 +46,29 @@ for i=1:nIt
 %      MSE_AGSM(i) = sum(abs((s/max(abs(s))-(an/max(abs(an))))).^2)/sum(abs(an/max(abs(an))).^2)*100;
     nSamp(i) = length(y);
     
-    figure;
-    rAbs = max(abs(r));
-    plot(y(1,:), abs(r)/rAbs, 'b');
-    hold on
+%     figure;
 %     rAbs = max(abs(r));
-%     plot(y(2,:), abs(r)/rAbs, 'r');
-    anAbs = max(abs(an(1,:)));
-    plot(y(1,:), abs(an(1,:))/anAbs, 'g');title('Analytic Solution Vs GSM');
-    mo(i) = getframe(gcf);
-    close;
+%     plot(y(1,:), abs(r)/rAbs, 'b');
+%     hold on
+% %     rAbs = max(abs(r));
+% %     plot(y(2,:), abs(r)/rAbs, 'r');
+%     anAbs = max(abs(an(1,:)));
+%     plot(y(1,:), abs(an(1,:))/anAbs, 'g');title('Analytic Solution Vs GSM');
+%     mo(i) = getframe(gcf);
+%     close;
 end
 
 
 figure;
-p1 = plot([nSamp/N], MSE_GSM, '.r');
+p1 = plot([nSamp/N], MSE_GSM, 'r*');
 hold on
-p2 = plot([nSamp/N], MSE_AGSM, 'ob');
+p2 = plot([nSamp/N], MSE_AGSM, 'bo');
 legend([p1, p2], 'GSM', 'AGSM')
 title('Comparison of MSE for GSM, AGSM Algorithms')
 xlabel('Zero Padding Factor ($${N_L \over N_0}$$)', 'Interpreter', 'Latex')
 ylabel('MSE (%)')
-
-figure;
-movie(mo, 12);
+% 
+% figure;
+% axis off;
+% movie(mo, 12);
 
