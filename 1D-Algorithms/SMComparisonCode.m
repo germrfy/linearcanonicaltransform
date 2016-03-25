@@ -14,13 +14,15 @@ ylabel('f(x)')
 % D = cos(alpha*pi/2);
 % A=3;B=2;C=1;D=1;
 % A=0.9;B=1;C=-0.1;D=1;     %%PAPER
- %A=0.5;B=4;C=-0.125;D=1;   %%PAPER
+ A=0.5;B=4;C=-0.125;D=1;   %%PAPER
  %A=1;B=2;C=2.5;D=6;        %%PAPER
- A=0.1;B=0.9;C=-1;D=1;
-f =g;% padarray(g, [0, round(length(g))]);
+ %A=0.1;B=0.9;C=-1;D=1;
+f = padarray(g, [0, 4*round(length(g))]);
 yGSM = abs(A)*Tx*((0:length(f)-1) - length(f)/2);       %output vector GSM
 yAGSM = (Tx/abs(D))*((0:length(f)-1) - length(f)/2);    %output vector AGSM
-y = [yGSM; yAGSM];
+yF= ((2*pi*fs)/(length(f)))*((0:length(f)-1) - length(f)/2); %output for FFT
+
+y = [yGSM; yAGSM;];
 
 %% Analytic Solution [2 analytic solns for GSM, AGSM (sample spacing)]
 
@@ -37,6 +39,16 @@ subplot(411);plot(y(1,:), abs(an(1,:))/anAbs);title('Analytic Solution Absolute 
 subplot(412);plot(y(1,:), angle(an(1,:)));title('Analytic Solution Phase');
 subplot(413);plot(y(1,:), real(an(1,:))/anAbs);title('Analytic Solution Real Part');
 subplot(414);plot(y(1,:), imag(an(1,:))/anAbs);title('Analytic Solution Imaginary Part');
+figure;
+subplot(211);plot(y(1,:), abs(an(1,:)));title('Analytic Solution Magnitude');xlabel('y');ylabel('|F(y)|', 'Interpreter', 'tex')
+subplot(212);plot(y(1,:), angle(an(1,:)));title('Analytic Solution Phase');xlabel('y');ylabel('\angle F(y)', 'Interpreter', 'tex')
+
+%% FT Analytic Solution
+
+FT = (exp(-(yF.^2/4)).*(erfz(3-(1i*yF/2))+erfz(3+(1i*yF/2))))/(2*sqrt(2));
+figure;
+subplot(211);plot(yF, abs(FT));title('FT Analytic Solution Magnitude');xlabel('y');ylabel('|F(y)|', 'Interpreter', 'tex')
+subplot(212);plot(yF, angle(FT));title('FT Analytic Solution Phase');xlabel('y');ylabel('\angle F(y)', 'Interpreter', 'tex')
 
 %% General Spectral Method
 
@@ -59,9 +71,19 @@ subplot(412);plot(y(2,:), angle(s), 'ob');hold on;plot(y(2,:), angle(an(2,:)), '
 subplot(413);plot(y(2,:), real(s)/scs, 'ob');hold on;plot(y(2,:), real(an(2,:))/anAbs, '.r');title('AGSM Real Part Vs Analytic Solution');
 subplot(414);plot(y(2,:), imag(s)/scs, 'ob');hold on; plot(y(2,:), imag(an(2,:))/anAbs, '.r');title('AGSM Imaginary Part Vs Analytic Solution');
 
+FF = fftshift(fft(fftshift(f)));
+figure;
+anAbs = max(abs(FT));
+scF = max(abs(FF));
+subplot(411);plot(yF, abs(FF)/scF, 'ob');hold on;plot(yF, abs(FT)/anAbs, '.r');title('FFT Absolute Value Vs Analytic Solution');
+subplot(412);plot(yF, angle(FF), 'ob');hold on;plot(yF, angle(FT), '.r');title('FFT Phase Vs Analytic Solution');
+subplot(413);plot(yF, real(FF)/scF, 'ob');hold on;plot(yF, real(FT)/anAbs, '.r');title('FFT Real Part Vs Analytic Solution');
+subplot(414);plot(yF, imag(FF)/scF, 'ob');hold on; plot(yF, imag(FT)/anAbs, '.r');title('FFT Imaginary Part Vs Analytic Solution');
+
 
 MSE_GSM = sum(abs((r/max(abs(r))-(an(1,:)/max(abs(an(1,:)))))).^2)/sum(abs(an(1,:)/max(abs(an(1,:)))).^2)*100
 MSE_AGSM = sum(abs((s/max(abs(s))-(an(2,:)/max(abs(an(2,:)))))).^2)/sum(abs(an(2,:)/max(abs(an(2,:)))).^2)*100
+MSE_FFT = sum(abs((FF/max(abs(FF))-(FT/max(abs(FT))))).^2)/sum(abs(FT/max(abs(FT))).^2)*100
 
 % MSE_GSM = immse(r/max(abs(r)),an/max(abs(an)))
 % MSE_AGSM = immse(s/max(abs(s)),an/max(abs(an)))
