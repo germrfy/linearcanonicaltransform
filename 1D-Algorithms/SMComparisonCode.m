@@ -21,8 +21,9 @@ f = padarray(g, [0, 4*round(length(g))]);
 yGSM = abs(A)*Tx*((0:length(f)-1) - length(f)/2);       %output vector GSM
 yAGSM = (Tx/abs(D))*((0:length(f)-1) - length(f)/2);    %output vector AGSM
 yF= ((2*pi*fs)/(length(f)))*((0:length(f)-1) - length(f)/2); %output for FFT
+yDM= (abs(B)/(length(f)*Tx))*((0:length(f)-1) - length(f)/2);
 
-y = [yGSM; yAGSM;];
+y = [yGSM; yAGSM; yDM];
 
 %% Analytic Solution [2 analytic solns for GSM, AGSM (sample spacing)]
 
@@ -49,6 +50,17 @@ FT = (exp(-(yF.^2/4)).*(erfz(3-(1i*yF/2))+erfz(3+(1i*yF/2))))/(2*sqrt(2));
 figure;
 subplot(211);plot(yF, abs(FT));title('FT Analytic Solution Magnitude');xlabel('y');ylabel('|F(y)|', 'Interpreter', 'tex')
 subplot(212);plot(yF, angle(FT));title('FT Analytic Solution Phase');xlabel('y');ylabel('\angle F(y)', 'Interpreter', 'tex')
+
+%% Direct Method
+
+dm = direct_method1d(f, Tx, A,B,D);
+figure; 
+scdm = max(abs(dm));
+subplot(411);plot(y(3,:), abs(dm)/scdm, 'ob');hold on;plot(y(3,:), abs(an(3,:))/anAbs, '.r');title('DM Absolute Value Vs Analytic Solution');
+subplot(412);plot(y(3,:), angle(dm), 'ob');hold on;plot(y(3,:), angle(an(3,:)), '.r');title('DM Phase Vs Analytic Solution');
+subplot(413);plot(y(3,:), real(dm)/scdm, 'ob');hold on;plot(y(3,:), real(an(3,:))/anAbs, '.r');title('DM Real Part Vs Analytic Solution');
+subplot(414);plot(y(3,:), imag(dm)/scdm, 'ob');hold on; plot(y(3,:), imag(an(3,:))/anAbs, '.r');title('DM Imaginary Part Vs Analytic Solution');
+
 
 %% General Spectral Method
 
@@ -81,9 +93,10 @@ subplot(413);plot(yF, real(FF)/scF, 'ob');hold on;plot(yF, real(FT)/anAbs, '.r')
 subplot(414);plot(yF, imag(FF)/scF, 'ob');hold on; plot(yF, imag(FT)/anAbs, '.r');title('FFT Imaginary Part Vs Analytic Solution');
 
 
-MSE_GSM = sum(abs((r/max(abs(r))-(an(1,:)/max(abs(an(1,:)))))).^2)/sum(abs(an(1,:)/max(abs(an(1,:)))).^2)*100
-MSE_AGSM = sum(abs((s/max(abs(s))-(an(2,:)/max(abs(an(2,:)))))).^2)/sum(abs(an(2,:)/max(abs(an(2,:)))).^2)*100
-MSE_FFT = sum(abs((FF/max(abs(FF))-(FT/max(abs(FT))))).^2)/sum(abs(FT/max(abs(FT))).^2)*100
+MSE_GSM = (sum((abs((r/max(abs(r))))-abs(an(1,:)/max(abs(an(1,:))))).^2)/sum(abs(an(1,:)/max(abs(an(1,:)))).^2))*100
+MSE_AGSM = (sum((abs((s/max(abs(s))))-abs(an(2,:)/max(abs(an(2,:))))).^2)/sum(abs(an(2,:)/max(abs(an(2,:)))).^2))*100
+MSE_DM = (sum((abs((dm/max(abs(dm))))-abs(an(3,:)/max(abs(an(3,:))))).^2)/sum(abs(an(3,:)/max(abs(an(3,:)))).^2))*100
+MSE_FFT = (sum((abs((FF/max(abs(FF))))-abs(FT/max(abs(FT)))).^2)/sum(abs(FT/max(abs(FT))).^2))*100
 
 % MSE_GSM = immse(r/max(abs(r)),an/max(abs(an)))
 % MSE_AGSM = immse(s/max(abs(s)),an/max(abs(an)))
